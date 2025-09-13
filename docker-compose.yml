@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database for local development
+  postgres:
+    image: postgres:15-alpine
+    container_name: habitai-postgres
+    environment:
+      POSTGRES_DB: habitai
+      POSTGRES_USER: habitai_user
+      POSTGRES_PASSWORD: habitai_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - habitai-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U habitai_user -d habitai"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Next.js Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: habitai-app
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://habitai_user:habitai_password@postgres:5432/habitai
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - habitai-network
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+
+volumes:
+  postgres_data:
+
+networks:
+  habitai-network:
+    driver: bridge

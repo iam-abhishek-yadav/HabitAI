@@ -1,22 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# HabitAI
+
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app) that uses PostgreSQL as the database with Prisma ORM.
+
+## Prerequisites
+
+- [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/)
+- [Node.js](https://nodejs.org/) (version 20 or higher) - only needed for local development without Docker
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/) - only needed for local development without Docker
 
 ## Getting Started
 
-First, run the development server:
+### Quick Start with Docker
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. **Clone the repository and navigate to the project directory:**
+   ```bash
+   git clone https://github.com/iam-abhishek-yadav/HabitAI.git
+   cd HabitAI
+   ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. **Start the application with Docker Compose:**
+   ```bash
+   docker-compose up --build
+   ```
+   This will:
+   - Start PostgreSQL database
+   - Wait for PostgreSQL to be healthy
+   - Build and start the Next.js application
+   - Automatically run database migrations
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. **Open your browser:**
+   Navigate to [http://localhost:3000](http://localhost:3000) to see the application.
+
+### Database Management
+
+- **PostgreSQL runs in Docker** on port 5432
+- **Database credentials:** 
+  - Database: `habitai`
+  - Username: `habitai_user`
+  - Password: `habitai_password`
+- **Access database directly:** `docker-compose exec postgres psql -U habitai_user -d habitai`
+
+## Available Scripts
+
+- `npm run dev` - Start the development server with hot reload
+- `npm run build` - Build the application for production
+- `npm run start` - Start the production server
+- `npm run lint` - Run ESLint
+
+## Useful Commands
+
+### Docker Commands
+- `docker-compose up --build` - Start both PostgreSQL and the app
+- `docker-compose up postgres -d` - Start only PostgreSQL database
+- `docker-compose down` - Stop all services
+- `docker-compose logs` - View logs for all services
+- `docker-compose logs postgres` - View database logs
+- `docker-compose logs app` - View app logs
+
+### Development Commands (when running locally)
+- `npx prisma studio` - Open Prisma Studio (database GUI)
+- `npx prisma migrate dev` - Run database migrations
+- `npx prisma generate` - Generate Prisma client
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
